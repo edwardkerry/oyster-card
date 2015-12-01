@@ -14,11 +14,9 @@ describe Oystercard do
   end
 
   describe 'journey history' do
-
     it 'shout initialize with empty journey hash' do
       expect(card.journey).to be_empty
     end
-
 
     #let(:journey){ {entry_station: entry_station, exit_station: exit_station}}
     it 'should store journey in hash' do
@@ -31,7 +29,6 @@ describe Oystercard do
     it 'should initialize with empty history array' do
       expect(card.history).to be_empty
     end
-
   end
 
   describe '#top_up' do
@@ -42,7 +39,7 @@ describe Oystercard do
     it 'should enforce a maximum balance on top up' do
       card.top_up(Oystercard::MAXIMUM_BALANCE)
       expect{card.top_up(1)}.
-      to raise_error "Balance limit of #{Oystercard::MAXIMUM_BALANCE} reached"
+      to raise_error "Balance limit is #{Oystercard::MAXIMUM_BALANCE}"
     end
   end
 
@@ -55,18 +52,17 @@ describe Oystercard do
     end
   end
 
-  describe 'touch_in' do
+  describe '#touch_in' do
     it 'should raise an error if balance is under 1' do
       expect{card.touch_in(:entry_station)}.
       to raise_error "Insufficient funds: #{card.balance}"
     end
 
-    it 'should remember the station' do
+    it 'should define starting station' do
       card.top_up(20)
       card.touch_in(:entry_station)
       expect(card.starting_station).to eq :entry_station
     end
-
   end
 
   describe '#in_journey' do
@@ -76,12 +72,12 @@ describe Oystercard do
       expect(card).to be_in_journey
     end
 
-    describe '#touch_out' do
-      it 'should change @in_use to true when card.touch_out' do
-        card.touch_out(:exit_station)
-        expect(card).not_to be_in_journey
-      end
+  describe '#touch_out' do
+    it 'should change @in_use to true when card.touch_out' do
+      card.touch_out(:exit_station)
+      expect(card).not_to be_in_journey
     end
+  end
 
     it 'should define end station' do
       card.touch_out(:exit_station)
@@ -94,7 +90,5 @@ describe Oystercard do
       card.touch_out(:exit_station)
       expect(card.starting_station).to eq nil
     end
-
-
   end
 end

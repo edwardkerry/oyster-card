@@ -15,12 +15,12 @@ class Oystercard
   end
 
   def top_up(amount)
-    fail "Balance limit of #{MAXIMUM_BALANCE} reached" if balance + amount > MAXIMUM_BALANCE
+    fail "Balance limit is #{MAXIMUM_BALANCE}" if balance_exceeded(amount)
     @balance += amount
   end
 
   def touch_in(station)
-    fail "Insufficient funds: #{balance}" if balance < MINIMUM_CHARGE
+    fail "Insufficient funds: #{balance}" if low_funds
     @starting_station = station
   end
 
@@ -36,6 +36,14 @@ class Oystercard
   end
 
   private
+
+  def balance_exceeded(amount)
+    balance + amount > MAXIMUM_BALANCE
+  end
+
+  def low_funds
+    balance < MINIMUM_CHARGE
+  end
 
   def deduct(amount)
     @balance -= amount
