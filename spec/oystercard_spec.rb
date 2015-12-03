@@ -6,28 +6,9 @@ describe Oystercard do
   let(:entry_station) {double :station}
   let(:exit_station) {double :station}
 
-
   describe 'card balance' do
     it 'should have a balance of 0' do
       expect(card.balance).to eq 0
-    end
-  end
-
-  describe 'journey history' do
-    it 'shout initialize with empty journey hash' do
-      expect(card.journey).to be_empty
-    end
-
-    #let(:journey){ {entry_station: entry_station, exit_station: exit_station}}
-    it 'should store journey in hash' do
-      card.top_up(20)
-      card.touch_in(:entry_station)
-      card.touch_out(:exit_station)
-      expect(card.journey).to include(:entry_station=>:exit_station)#journey
-    end
-
-    it 'should initialize with empty history array' do
-      expect(card.history).to be_empty
     end
   end
 
@@ -43,25 +24,26 @@ describe Oystercard do
     end
   end
 
-  describe '#deduct' do
-
-    it 'should check that touch_out changes balance by amount' do
-      card.top_up(20)
-      expect{card.touch_out(:exit_station)}.
-      to change {card.balance}.by -Oystercard::MINIMUM_CHARGE
-    end
-  end
-
   describe '#touch_in' do
     it 'should raise an error if balance is under 1' do
       expect{card.touch_in(:entry_station)}.
       to raise_error "Insufficient funds: #{card.balance}"
     end
+  end
 
-    it 'should define starting station' do
+
+  describe '#touch_out' do
+    it 'should change @in_use to true when card.touch_out' do
+      card.touch_out(:exit_station)
+      expect(card).not_to be_in_journey
+    end
+  end
+
+  describe '#deduct' do
+    it 'should check that touch_out changes balance by amount' do
       card.top_up(20)
-      card.touch_in(:entry_station)
-      expect(card.starting_station).to eq :entry_station
+      expect{card.touch_out(:exit_station)}.
+      to change {card.balance}.by -Oystercard::MINIMUM_CHARGE
     end
   end
 
@@ -71,24 +53,6 @@ describe Oystercard do
       card.touch_in(:entry_station)
       expect(card).to be_in_journey
     end
-
-  describe '#touch_out' do
-    it 'should change @in_use to true when card.touch_out' do
-      card.touch_out(:exit_station)
-      expect(card).not_to be_in_journey
-    end
   end
 
-    it 'should define end station' do
-      card.touch_out(:exit_station)
-      expect(card.end_station).to eq :exit_station
-    end
-
-    it 'should forget the starting station' do
-      card.top_up(10)
-      card.touch_in(:entry_station)
-      card.touch_out(:exit_station)
-      expect(card.starting_station).to eq nil
-    end
   end
-end
