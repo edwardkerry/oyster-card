@@ -1,15 +1,14 @@
 class Journey
 
-attr_reader :history_log
+attr_reader :history_log, :current_journey, :complete
 
 def initialize
-  @history_log = {}
+  @complete = false
+  @history_log = []
   @current_journey = []
-  @counter = 0
 end
 
 def start(entry_station)
-  tracking
   @current_journey << entry_station
 end
 
@@ -18,15 +17,14 @@ def end(exit_station)
   log_history
 end
 
-private
+def complete?
+  @complete
+end
 
 def log_history
-  @history_log[@counter] = @current_journey
+  @history_log << @current_journey
   @current_journey = []
 end
 
-def tracking
-  @counter += 1
-end
 
 end
