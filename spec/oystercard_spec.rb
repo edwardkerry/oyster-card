@@ -31,9 +31,8 @@ describe Oystercard do
     end
   end
 
-
   describe '#touch_out' do
-    it 'should change @in_use to true when card.touch_out' do
+    it 'should change @in_use to false when card.touch_out' do
       card.touch_out(:exit_station)
       expect(card).not_to be_in_journey
     end
