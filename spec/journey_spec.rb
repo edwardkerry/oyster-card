@@ -10,33 +10,18 @@ describe Journey do
 
   it 'starts a journey on touch in' do
     journey.start(:entry_station1)
-    expect(journey).not_to be_complete
+    expect(journey.entry_station).to eq :entry_station1
   end
 
   it 'ends a journey on touch out' do
     journey.end(:exit_station1)
-    expect(journey).to be_complete
+    expect(journey.exit_station).to eq :exit_station1
   end
 
   it 'has a minimum fare' do
     journey.start(:entry_station1)
     journey.end(:exit_station2)
     expect(journey.fare).to eq Journey::MINIMUM_FARE
-  end
-
-  it 'has a penalty fare' do
-    expect(journey.fare).to eq Journey::PENALTY_FARE
-  end
-
-  it 'stores the entry station' do
-    journey.start(:entry_station1)
-    expect(journey.current_journey[0]).to eq :entry_station1
-  end
-
-  it 'stores the exit station' do
-    journey.start(:entry_station1)
-    journey.end(:exit_station1)
-    expect(journey.current_journey[1]).to eq :exit_station1
   end
 
   it 'gives a penalty if not tapped in' do

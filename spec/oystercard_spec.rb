@@ -66,10 +66,10 @@ describe Oystercard do
         end
       end
       context 'when not touched in' do
-        it 'should charge a pentalty fare' do
+        it 'should charge a penalty fare' do
           card.top_up(20)
           expect{card.touch_out(:exit_station)}.
-          to change {card.balance}.by -(Journey::PENALTY_FARE + Journey::MINIMUM_FARE)
+          to change {card.balance}.by -(Journey::PENALTY_FARE)
         end
       end
     end

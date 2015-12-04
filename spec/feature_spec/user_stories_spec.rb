@@ -91,7 +91,7 @@ describe 'User Stories' do
     card = Oystercard.new
     card.top_up(20)
     card.touch_in(:Waterloo)
-    expect(card.journey.current_journey[0]).to eq :Waterloo
+    expect(card.journey.entry_station).to eq :Waterloo
   end
 
   # User Story 9
@@ -125,7 +125,7 @@ describe 'User Stories' do
     card = Oystercard.new
     card.top_up(20)
     card.touch_out(:Waterloo)
-    expect{card.touch_out(:Angel)}.to change{card.balance}.by -(Journey::PENALTY_FARE + Journey::MINIMUM_FARE)
+    expect{card.touch_out(:Angel)}.to change{card.balance}.by -(Journey::PENALTY_FARE)
   end
 
   # User Story 11

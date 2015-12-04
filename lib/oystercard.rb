@@ -19,17 +19,16 @@ class Oystercard
   end
 
   def touch_in(station)
-    deduct(Journey::PENALTY_FARE) if in_journey?
+    deduct(journey.fare) if in_journey?
     fail "Insufficient funds: #{balance}" if low_funds?
     @in_use = true
     journey.start(station)
   end
 
   def touch_out(station)
-    deduct(Journey::PENALTY_FARE) if !in_journey?
-    @in_use = false
     journey.end(station)
-    deduct(Journey::MINIMUM_FARE)
+    deduct(journey.fare)
+    @in_use = false
   end
 
   private
