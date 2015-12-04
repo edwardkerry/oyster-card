@@ -19,7 +19,12 @@ class Journey
   end
 
   def fare
-    @entry_station && @exit_station ? MINIMUM_FARE : PENALTY_FARE
+      @entry_station && @exit_station ? calculate_fare : PENALTY_FARE
+  end
+
+  def calculate_fare
+    diff = (entry_station.zone - exit_station.zone).abs
+    MINIMUM_FARE + diff
   end
 
 end

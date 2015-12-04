@@ -31,6 +31,10 @@ class Oystercard
     @in_use = false
   end
 
+  def history
+    journey_log.read
+  end
+
   private
 
   def balance_exceeded?(amount)
