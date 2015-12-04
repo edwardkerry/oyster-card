@@ -2,10 +2,9 @@ require 'oystercard'
 
 describe Oystercard do
 
-  let (:journey) {double :journey, PENALTY_FARE: 6, MINIMUM_FARE: 1, start: nil, end_journey: nil, fare: 1, clear: nil}
-  let(:journey_klass) { double :journey_klass, new: journey }
-  
-  subject(:card) {described_class.new(journey_klass)}
+  let(:journey_log) { double :journey_log, start_journey: nil, end_journey: nil, clear_journey: nil, charge: 1, new_journey: nil }
+
+  subject(:card) {described_class.new(journey_log)}
   let(:entry_station) {double :station}
   let(:exit_station) {double :station}
 
