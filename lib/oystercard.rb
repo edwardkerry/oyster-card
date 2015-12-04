@@ -1,16 +1,13 @@
-require_relative 'journey'
-
 class Oystercard
-
   attr_reader :balance, :journey, :in_use
 
   MAXIMUM_BALANCE = 90
+  MINIMUM_BALANCE = 1
 
-
-  def initialize
+  def initialize(journey_klass)
     @balance = 0
     @in_use = false
-    @journey = Journey.new
+    @journey = journey_klass.new
   end
 
   def top_up(amount)
@@ -26,8 +23,9 @@ class Oystercard
   end
 
   def touch_out(station)
-    journey.end(station)
+    journey.end_journey(station)
     deduct(journey.fare)
+    journey.clear
     @in_use = false
   end
 
@@ -38,7 +36,7 @@ class Oystercard
   end
 
   def low_funds?
-    balance < Journey::MINIMUM_FARE
+    balance < MINIMUM_BALANCE
   end
 
   def deduct(amount)
