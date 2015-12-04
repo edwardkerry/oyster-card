@@ -40,7 +40,7 @@ describe 'User Stories' do
     card = Oystercard.new
     card.top_up(20)
     card.touch_in(:Waterloo)
-    expect{card.touch_out(:Angel)}.to change{card.balance}.by -Oystercard::MINIMUM_CHARGE
+    expect{card.touch_out(:Angel)}.to change{card.balance}.by -Journey::MINIMUM_FARE
   end
 
 
@@ -80,7 +80,7 @@ describe 'User Stories' do
     card = Oystercard.new
     card.top_up(20)
     card.touch_in(:Waterloo)
-    expect{card.touch_out(:Angel)}.to change{card.balance}.by -Oystercard::MINIMUM_CHARGE
+    expect{card.touch_out(:Angel)}.to change{card.balance}.by -Journey::MINIMUM_FARE
   end
 
   # User Story 8
@@ -118,14 +118,14 @@ describe 'User Stories' do
     card = Oystercard.new
     card.top_up(20)
     card.touch_in(:Waterloo)
-    expect{card.touch_in(:Angel)}.to change{card.balance}.by -Oystercard::PENALTY_FARE
+    expect{card.touch_in(:Angel)}.to change{card.balance}.by -Journey::PENALTY_FARE
   end
 
   it 'charges a penalty when not touched in' do
     card = Oystercard.new
     card.top_up(20)
     card.touch_out(:Waterloo)
-    expect{card.touch_out(:Angel)}.to change{card.balance}.by -(Oystercard::PENALTY_FARE + Oystercard::MINIMUM_CHARGE)
+    expect{card.touch_out(:Angel)}.to change{card.balance}.by -(Journey::PENALTY_FARE + Journey::MINIMUM_FARE)
   end
 
   # User Story 11
