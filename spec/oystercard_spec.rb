@@ -2,10 +2,12 @@ require 'oystercard'
 
 describe Oystercard do
 
-  subject(:card) {described_class.new}
+  let (:journey) {double :journey, PENALTY_FARE: 6, MINIMUM_FARE: 1, start: nil, end_journey: nil, fare: 1, clear: nil}
+  let(:journey_klass) { double :journey_klass, new: journey }
+  
+  subject(:card) {described_class.new(journey_klass)}
   let(:entry_station) {double :station}
   let(:exit_station) {double :station}
-  let (:journey) {double :journey, PENALTY_FARE: nil, MINIMUM_FARE: nil}
 
   context 'when the card is out of money' do
     describe 'card balance' do
@@ -42,13 +44,6 @@ describe Oystercard do
           card.touch_in(:entry_station)
           expect(card.in_use).to be true
         end
-        context 'when not tapped out' do
-          it 'should charge a penalty fare' do
-            card.top_up(20)
-            card.touch_in(:entry_station)
-            expect{card.touch_in(:exit_station)}.to change {card.balance}.by -Journey::PENALTY_FARE
-          end
-        end
       end
     end
 
@@ -57,19 +52,6 @@ describe Oystercard do
         it 'should change @in_use to false' do
           card.touch_out(:exit_station)
           expect(card.in_use).to be false
-        end
-        it 'should deduct the minimum fare' do
-          card.top_up(20)
-          card.touch_in(:entry_station)
-          expect{card.touch_out(:exit_station)}.
-          to change {card.balance}.by -Journey::MINIMUM_FARE
-        end
-      end
-      context 'when not touched in' do
-        it 'should charge a penalty fare' do
-          card.top_up(20)
-          expect{card.touch_out(:exit_station)}.
-          to change {card.balance}.by -(Journey::PENALTY_FARE)
         end
       end
     end
